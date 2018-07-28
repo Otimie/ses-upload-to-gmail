@@ -1,1 +1,1 @@
-# ses-upload-to-gmail
+# SES Upload to Gmail
