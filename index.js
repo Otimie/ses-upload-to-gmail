@@ -29,7 +29,7 @@ exports.handler = (event, context, callback) => {
 		response.on('end', () => {
 			Promise.all(event.Records.map((currentValue) => {
 				var params = {
-					Bucket: '', //TODO: Get bucket name from SNS
+					Bucket: JSON.parse(currentValue.Sns.Message).receipt.action.bucketName,
 					Key: JSON.parse(currentValue.Sns.Message).receipt.action.objectKey
 				};
 
