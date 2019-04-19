@@ -2,9 +2,9 @@
 	"name": "ses-upload-to-gmail",
 	"version": "1.0.0",
 	"dependencies": {
-		"js-base64": "2.4.8"
+		"js-base64": "2.5.1"
 	},
 	"devDependencies": {
-		"aws-sdk": "2.282.1"
+		"aws-sdk": "2.440.0"
 	}
 }
