@@ -26,52 +26,56 @@ exports.handler = (event, context, callback) => {
 		});
 
 		response.on('end', () => {
-
-			var params = {
-				Bucket: '', //TODO: Get bucket name from SNS
-				Key: JSON.parse(event.Records[0].Sns.Message).receipt.action.objectKey
-			};
-
-			s3.getObject(params, (error, data) => {
-				if (error) {
-					callback(error);
-				}
-				else {
-					var options = {
-						hostname: 'www.googleapis.com',
-						path: '/gmail/v1/users/me/messages/import?access_token=' + JSON.parse(body).access_token,
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/json',
-						}
+			Promise.all(event.Records.map((currentValue) => {
+				return new Promise((resolve, reject) => {
+					var params = {
+						Bucket: JSON.parse(currentValue.Sns.Message).receipt.action.bucketName,
+						Key: JSON.parse(currentValue.Sns.Message).receipt.action.objectKey
 					};
 
-					var request = https.request(options, (response) => {
-						//var body = '';
+					s3.getObject(params, (error, data) => {
+						if (error) {
+							callback(error);
+						}
+						else {
+							var options = {
+								hostname: 'www.googleapis.com',
+								path: '/gmail/v1/users/me/messages/import?access_token=' + JSON.parse(body).access_token,
+								method: 'POST',
+								headers: {
+									'Content-Type': 'application/json',
+								}
+							};
 
-						//response.on('data', (data) => {
-						//	body += data;
-						//});
+							var request = https.request(options, (response) => {
+								//var body = '';
 
-						//response.on('end', () => {
-						//	console.log(body);
-						//});
+								//response.on('data', (data) => {
+								//	body += data;
+								//});
+
+								response.on('end', () => {
+									resolve();
+								});
+							});
+							
+							request.write(JSON.stringify({
+								'labelIds': [
+									'UNREAD',
+									'INBOX'
+								],
+								'raw': Base64.encodeURI(data.Body)
+							}));
+							
+							request.end();
+						}
 					});
-
-					request.write(JSON.stringify({
-						"labelIds": [
-							"UNREAD",
-							"INBOX"
-						],
-						"raw": Base64.encodeURI(data.Body)
-					}));
-
-					request.end();
-				}
+				});
+			})).then(() => {
+				callback(null);
 			});
 		});
 	});
-
 	request.write(data);
 	request.end();
 };
