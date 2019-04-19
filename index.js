@@ -39,7 +39,6 @@ exports.handler = (event, context, callback) => {
 							callback(error);
 						}
 						else {
-							console.log('Got object from S3');
 							var options = {
 								hostname: 'www.googleapis.com',
 								path: '/gmail/v1/users/me/messages/import?access_token=' + JSON.parse(body).access_token,
@@ -57,7 +56,6 @@ exports.handler = (event, context, callback) => {
 								//});
 
 								response.on('end', () => {
-									console.log('This promise resolved');
 									resolve();
 								});
 							});
@@ -75,7 +73,6 @@ exports.handler = (event, context, callback) => {
 					});
 				});
 			})).then(() => {
-				console.log('All promises resolved');
 				callback(null);
 			});
 		});
