@@ -74,4 +74,4 @@ exports.handler = (event, context, callback) => {
 
 	request.write(data);
 	request.end();
-}
+};
