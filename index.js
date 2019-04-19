@@ -26,7 +26,6 @@ exports.handler = (event, context, callback) => {
 		});
 
 		response.on('end', () => {
-			console.log('Got OAuth credentials');
 			Promise.all(event.Records.map((currentValue) => {
 				return new Promise((resolve, reject) => {
 					var params = {
