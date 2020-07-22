@@ -40,10 +40,11 @@ exports.handler = (event, context, callback) => {
 						else {
 							var options = {
 								hostname: 'www.googleapis.com',
-								path: '/gmail/v1/users/me/messages/import?access_token=' + JSON.parse(body).access_token,
+								path: '/gmail/v1/users/me/messages/import,
 								method: 'POST',
 								headers: {
 									'Content-Type': 'application/json',
+									'Authorization': 'Bearer ' + JSON.parse(body).access_token
 								}
 							};
 
