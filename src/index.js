@@ -10,8 +10,8 @@ exports.handler = (event, context, callback) => {
 	var data = 'client_secret=' + process.env.clientSecret + '&grant_type=refresh_token&refresh_token=' + process.env.refreshToken + '&client_id=' + process.env.clientId;
 
 	var options = {
-		hostname: 'www.googleapis.com',
-		path: '/oauth2/v4/token',
+		hostname: 'oauth2.googleapis.com',
+		path: '/token',
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded'
