@@ -48,6 +48,9 @@ exports.handler = (event, context, callback) => {
 							};
 
 							var request = https.request(options, (response) => {
+								
+								console.log(response.statusCode);
+								
 								//var body = '';
 
 								//response.on('data', (data) => {
